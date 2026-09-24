@@ -6,7 +6,6 @@ export const routes = {
     root: '/',
     absences: {
         home: 'absences',
-        foreign: 'foreign',
         history: 'history',
         details: 'absences/:id',
     },

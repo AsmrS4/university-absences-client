@@ -1,0 +1,51 @@
+import { createBrowserRouter } from 'react-router-dom';
+import { routes } from './routes';
+import { AppLayout } from '@/pages/AppLayout';
+import AbsencePage from '@/pages/Absences/AbsencePage';
+import PrivateRouter from '@/app/PrivateRouter';
+import LoginPage from '@/pages/Auth/LoginPage';
+import { AuthLoginHandler } from '@/pages/Auth/AuthLoginHandler';
+import HomePage from '@/pages/Absences/HomePage';
+import HistoryPage from '@/pages/Absences/HistoryPage';
+
+export const router = createBrowserRouter(
+    [
+        {
+            element: <LoginPage />,
+            path: routes.auth.login,
+        },
+        {
+            element: <AuthLoginHandler />,
+            path: routes.auth.oauth,
+        },
+        {
+            element: <PrivateRouter />,
+            children: [
+                {
+                    element: <AppLayout />,
+                    children: [
+                        {
+                            element: <HomePage />,
+                            path: routes.root,
+                        },
+                        {
+                            element: <HistoryPage />,
+                            path: routes.absences.history,
+                        },
+                        {
+                            element: <AbsencePage />,
+                            path: routes.absences.details,
+                        },
+                        {
+                            element: <HomePage />,
+                            path: routes.absences.home,
+                        },
+                    ],
+                },
+            ],
+        },
+    ],
+    {
+        basename: '/plugins/absences_plugin/app',
+    },
+);
