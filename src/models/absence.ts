@@ -1,6 +1,7 @@
-interface AbsenceType {
+export interface AbsenceType {
     id: number;
     student_id: number;
+    student_name: string;
     application_type: string;
     application_status: string;
     date_from: string;
@@ -8,13 +9,13 @@ interface AbsenceType {
     create_time: string;
 }
 
-interface AbsenceApplication extends AbsenceType {
+export interface AbsenceApplication extends AbsenceType {
     comment: string;
     related_to: string;
     rejection_reason: string;
 }
 
-interface AbsenceAttachment {
+export interface AbsenceAttachment {
     id: number;
     application_id: number;
     file_id: string;
@@ -25,7 +26,7 @@ interface AbsenceAttachment {
     uploaded_at: string;
 }
 
-interface AbsenceApplications {
+export interface AbsenceApplications {
     data: AbsenceType[];
     total: number;
     page: number;

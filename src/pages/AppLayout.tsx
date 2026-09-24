@@ -80,6 +80,7 @@ export const AppLayout = () => {
             key={item.id}
             active={item.id === active}
             label={item.label}
+            description={item.description}
             leftSection={<item.icon size={16} />}
             onClick={(e) => {
                 e.preventDefault();
