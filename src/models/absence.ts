@@ -32,3 +32,29 @@ export interface AbsenceApplications {
     page: number;
     size: number;
 }
+
+export interface AbsenceApplicationsFilterParams {
+    group_code: number | null;
+    type: string | null;
+    full_name: string | null;
+    page: number;
+    size: number;
+}
+
+export interface AbsenceHistoryParams {
+    group_code: number;
+    type: string;
+    full_name: string;
+    date_from: string;
+    date_to: string;
+    page: number;
+    size: number;
+}
+
+export interface AbsenceReportParams {
+    group_code: number;
+    domestic: string;
+    full_name: string;
+    date_from: string;
+    date_to: string;
+}

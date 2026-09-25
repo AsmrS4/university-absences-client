@@ -1,4 +1,4 @@
-import { Box, Select, Tabs, TextInput } from '@mantine/core';
+import { Box, Select, TextInput } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useState } from 'react';
 
