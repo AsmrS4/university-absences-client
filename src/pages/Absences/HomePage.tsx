@@ -1,6 +1,8 @@
 import { ApplicationsTable } from '@/components/ApplicationTable';
+import { GroupCodeInput } from '@/components/GroupCodeInput';
+import { SelectInput } from '@/components/SelectInput';
 import type { AbsenceType } from '@/models/absence';
-import { Box, Select, Tabs, TextInput } from '@mantine/core';
+import { Box, Tabs, TextInput, type ComboboxItem } from '@mantine/core';
 
 export default function HomePage() {
     const statuses = [
@@ -10,6 +12,7 @@ export default function HomePage() {
         { label: 'Учебная', value: 'study' },
         { label: 'Другая', value: 'another' },
     ];
+
     return (
         <>
             <div className='w-full h-full flex flex-col gap-6'>
@@ -32,36 +35,19 @@ export default function HomePage() {
                                 <span className='text-2xl font-medium p-2 pt-0'>0</span>
                             </Box>
                             <Box className='mt-4 flex flex-row items-center gap-4'>
-                                <Select
-                                    label='Тип пропуска'
-                                    placeholder='Укажите тип пропуска'
+                                <SelectInput
+                                    label={'Тип пропуска'}
+                                    placeholder={'Укажите тип пропуска'}
                                     data={statuses}
-                                    className='max-w-80 w-full'
-                                    size='md'
-                                    styles={{
-                                        label: {
-                                            fontSize: '18px',
-                                            fontWeight: 600,
-                                            color: '#575859',
-                                            marginBottom: '4px',
-                                        },
+                                    value={''}
+                                    onChange={function (
+                                        value: string | null,
+                                        option: ComboboxItem,
+                                    ): void {
+                                        throw new Error('Function not implemented.');
                                     }}
                                 />
-                                <TextInput
-                                    label='Группа'
-                                    placeholder='Введите номер группы'
-                                    type='number'
-                                    maxLength={6}
-                                    size='md'
-                                    styles={{
-                                        label: {
-                                            fontSize: '18px',
-                                            fontWeight: 600,
-                                            color: '#575859',
-                                            marginBottom: '4px',
-                                        },
-                                    }}
-                                />
+                                <GroupCodeInput value={0} onChange={undefined} />
                             </Box>
                             <Box className='mt-4 w-full'>
                                 <TextInput
@@ -81,36 +67,19 @@ export default function HomePage() {
                         </Tabs.Panel>
                         <Tabs.Panel className='p-4' value='extend'>
                             <Box className='flex flex-row items-center gap-4'>
-                                <Select
-                                    label='Тип пропуска'
-                                    placeholder='Укажите тип пропуска'
+                                <SelectInput
+                                    label={'Тип пропуска'}
+                                    placeholder={'Укажите тип пропуска'}
                                     data={statuses}
-                                    className='max-w-80 w-full'
-                                    size='md'
-                                    styles={{
-                                        label: {
-                                            fontSize: '18px',
-                                            fontWeight: 600,
-                                            color: '#575859',
-                                            marginBottom: '4px',
-                                        },
+                                    value={''}
+                                    onChange={function (
+                                        value: string | null,
+                                        option: ComboboxItem,
+                                    ): void {
+                                        throw new Error('Function not implemented.');
                                     }}
                                 />
-                                <TextInput
-                                    label='Группа'
-                                    placeholder='Введите номер группы'
-                                    type='number'
-                                    maxLength={6}
-                                    size='md'
-                                    styles={{
-                                        label: {
-                                            fontSize: '18px',
-                                            fontWeight: 600,
-                                            color: '#575859',
-                                            marginBottom: '4px',
-                                        },
-                                    }}
-                                />
+                                <GroupCodeInput value={0} onChange={undefined} />
                             </Box>
                             <Box className='mt-4 w-full'>
                                 <TextInput
