@@ -1,4 +1,6 @@
 import type { AbsenceApplicationsFilterParams, AbsenceType } from '@/models/absence';
+import type { Attachment } from '@/models/file';
+import type { UserDetails } from '@/models/user';
 import axios from 'axios';
 import { data } from 'react-router-dom';
 
@@ -118,8 +120,8 @@ const MOCK_ABSENCE = {
     id: 1,
     student_id: 101,
     student_name: 'Иванов Иван Иванович',
-    application_type: 'Болезнь',
-    application_status: 'Одобрено',
+    application_type: 'sick',
+    application_status: 'pending',
     date_from: '2024-03-10',
     date_to: '2024-03-15',
     create_time: '2024-03-09T14:30:00',
@@ -134,4 +136,26 @@ export const fetchAbsences = async (params: AbsenceApplicationsFilterParams) => 
 
 export const fetchDetails = async (id: number) => {
     return MOCK_ABSENCE;
+};
+
+export const approveAbsence = async (id: number | undefined): Promise<boolean> => {
+    return true;
+};
+
+export const rejectAbsence = async (id: number | undefined, message: string): Promise<boolean> => {
+    return true;
+};
+
+export const fetchAttachments = async (id: number): Promise<Attachment[]> => {
+    return [];
+};
+
+export const fetchStudentDetails = async (id: number | undefined): Promise<UserDetails> => {
+    return {
+        user_id: 1,
+        position_type: 'Студент',
+        nationality_type: 'РФ',
+        faculty_name: 'Программная инженерия',
+        group_code: 972303,
+    };
 };
