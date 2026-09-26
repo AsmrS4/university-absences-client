@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { routes } from './routes';
 import { AppLayout } from '@/pages/AppLayout';
-import AbsencePage from '@/pages/Absences/AbsencePage';
+import { AbsencePage } from '@/pages/Absences/AbsencePage';
 import PrivateRouter from '@/app/PrivateRouter';
 import LoginPage from '@/pages/Auth/LoginPage';
 import { AuthLoginHandler } from '@/pages/Auth/AuthLoginHandler';

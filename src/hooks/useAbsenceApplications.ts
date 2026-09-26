@@ -21,7 +21,7 @@ export const useAbsenceApplications = () => {
 
     const navigate = useNavigate();
     const handleSelectOrder = (id: number): void => {
-        navigate(`/${routes.absences.home}/${id}`);
+        navigate(`/${routes.absences.home}/${id}`, { replace: true });
     };
 
     const handleApplications = (data: AbsenceApplications): void => {
