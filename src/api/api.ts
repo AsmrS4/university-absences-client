@@ -1,12 +1,16 @@
-import type { AbsenceApplicationsFilterParams, AbsenceType } from '@/models/absence';
+import type {
+    AbsenceApplicationsFilterParams,
+    AbsenceBase,
+    AbsenceStatus,
+    AbsenceType,
+} from '@/models/absence';
 import type { Attachment } from '@/models/file';
 import type { UserDetails } from '@/models/user';
 import axios from 'axios';
-import { data } from 'react-router-dom';
 
 const BASE_URI = '/api/triggers/http/absences_plugin/api/absences';
 
-const MOCK_ABSENCES: AbsenceType[] = [
+const MOCK_ABSENCES: AbsenceBase[] = [
     {
         id: 1,
         student_id: 101,
@@ -153,9 +157,29 @@ export const fetchAttachments = async (id: number): Promise<Attachment[]> => {
 export const fetchStudentDetails = async (id: number | undefined): Promise<UserDetails> => {
     return {
         user_id: 1,
-        position_type: 'Студент',
-        nationality_type: 'РФ',
+        status: 'active',
+        position_type: 'student',
+        nationality_type: 'domestic',
         faculty_name: 'Программная инженерия',
         group_code: 972303,
     };
+};
+
+export const fetchStatuses = async (): Promise<AbsenceStatus[]> => {
+    return [
+        { label: 'На рассмотрении', value: 'pending' },
+        { label: 'Одобрена', value: 'approved' },
+        { label: 'Отклонена', value: 'rejected' },
+        { label: 'Отозвана', value: 'recalled' },
+    ];
+};
+
+export const fetchTypes = async (): Promise<AbsenceType[]> => {
+    return [
+        { label: 'По болезни', value: 'sick' },
+        { label: 'Прием у врача', value: 'medical' },
+        { label: 'Командировка', value: 'business_trip' },
+        { label: 'Учебная', value: 'study' },
+        { label: 'Другая', value: 'another' },
+    ];
 };

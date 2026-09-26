@@ -1,9 +1,3 @@
-import { CommentModal } from '@/components/Modal';
-import { useAbsenceAttachment } from '@/hooks/useAbsenceAttachment';
-import { useAbsenceDetails } from '@/hooks/useAbsenceDetails';
-import { useUserDetails } from '@/hooks/useUserDetails';
-import type { Attachment } from '@/models/file';
-import { formatDate } from '@/utils/date';
 import {
     Anchor,
     Badge,
@@ -18,21 +12,24 @@ import {
     useModalsStack,
 } from '@mantine/core';
 import { CloudXIcon, FileIcon } from '@phosphor-icons/react';
-import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+
+import { CommentModal } from '@/components/Modal';
+import { useAbsenceAttachment } from '@/hooks/useAbsenceAttachment';
+import { useAbsenceDetails } from '@/hooks/useAbsenceDetails';
+import { useUserDetails } from '@/hooks/useUserDetails';
+import type { Attachment } from '@/models/file';
+import { formatDate, formatDisplayDate, formatDisplayPeriod } from '@/utils/date';
 
 export const AbsencePage = () => {
     const { id } = useParams();
     const stack = useModalsStack(['reject-action', 'confirm-action']);
 
-    const { absence, loading, errorMessage, handleApproveAbsence, handleRejectAbsence } =
-        useAbsenceDetails(id);
+    const { absence, loading, handleApproveAbsence, handleRejectAbsence } = useAbsenceDetails(id);
     const { attachments, loading: attachmentsLoading } = useAbsenceAttachment(id);
     const { userDetails, state } = useUserDetails(absence?.student_id);
-    const formatPeriod = (from: string, to: string) => {
-        return from === to ? from : `${from} — ${to}`;
-    };
-    const btnAreVisible = absence?.application_status == 'pending';
+
+    const buttonsVisible = absence?.application_status == 'pending';
 
     if (id == undefined || absence == null) {
         return (
@@ -51,7 +48,7 @@ export const AbsencePage = () => {
         <div className='max-w-180 w-full h-full flex flex-col gap-5'>
             <div className='flex flex-row items-center justify-between'>
                 <h1 className='text-2xl font-semibold'>Детали пропуска</h1>
-                {btnAreVisible && (
+                {buttonsVisible && (
                     <Box className='flex flex-row items-center justify-between gap-3'>
                         <Button
                             variant='light'
@@ -100,18 +97,28 @@ export const AbsencePage = () => {
                             <DataList.ItemLabel>ФИО</DataList.ItemLabel>
                             <DataList.ItemValue>{absence.student_name}</DataList.ItemValue>
                         </DataList.Item>
-                        <DataList.Item>
-                            <DataList.ItemLabel>Гражданство</DataList.ItemLabel>
-                            <DataList.ItemValue>{userDetails?.nationality_type}</DataList.ItemValue>
-                        </DataList.Item>
-                        <DataList.Item>
-                            <DataList.ItemLabel>Группа</DataList.ItemLabel>
-                            <DataList.ItemValue>{userDetails?.group_code}</DataList.ItemValue>
-                        </DataList.Item>
-                        <DataList.Item>
-                            <DataList.ItemLabel>Факультет</DataList.ItemLabel>
-                            <DataList.ItemValue>{userDetails?.faculty_name}</DataList.ItemValue>
-                        </DataList.Item>
+                        {state === 'success' && (
+                            <>
+                                <DataList.Item>
+                                    <DataList.ItemLabel>Гражданство</DataList.ItemLabel>
+                                    <DataList.ItemValue>
+                                        {userDetails?.nationality_type}
+                                    </DataList.ItemValue>
+                                </DataList.Item>
+                                <DataList.Item>
+                                    <DataList.ItemLabel>Группа</DataList.ItemLabel>
+                                    <DataList.ItemValue>
+                                        {userDetails?.group_code}
+                                    </DataList.ItemValue>
+                                </DataList.Item>
+                                <DataList.Item>
+                                    <DataList.ItemLabel>Факультет</DataList.ItemLabel>
+                                    <DataList.ItemValue>
+                                        {userDetails?.faculty_name}
+                                    </DataList.ItemValue>
+                                </DataList.Item>
+                            </>
+                        )}
                         <DataList.Item>
                             <DataList.ItemLabel>Тип заявки</DataList.ItemLabel>
                             <DataList.ItemValue>{absence.application_type}</DataList.ItemValue>
@@ -119,12 +126,16 @@ export const AbsencePage = () => {
                         <DataList.Item>
                             <DataList.ItemLabel>Даты отсутствия</DataList.ItemLabel>
                             <DataList.ItemValue>
-                                <span>{formatPeriod(absence.date_from, absence.date_to)}</span>
+                                <span>
+                                    {formatDisplayPeriod(absence.date_from, absence.date_to)}
+                                </span>
                             </DataList.ItemValue>
                         </DataList.Item>
                         <DataList.Item>
                             <DataList.ItemLabel>Дата обращения</DataList.ItemLabel>
-                            <DataList.ItemValue>{absence.create_time}</DataList.ItemValue>
+                            <DataList.ItemValue>
+                                {formatDisplayDate(absence.create_time)}
+                            </DataList.ItemValue>
                         </DataList.Item>
                     </DataList>
                 </Skeleton>

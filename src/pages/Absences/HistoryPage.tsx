@@ -1,5 +1,5 @@
+import { PeriodDatePicker } from '@/components/DatePicker';
 import { Box, Select, TextInput } from '@mantine/core';
-import { DatePickerInput } from '@mantine/dates';
 import { useState } from 'react';
 
 export default function HistoryPage() {
@@ -32,23 +32,7 @@ export default function HistoryPage() {
                                 },
                             }}
                         />
-                        <DatePickerInput
-                            type='range'
-                            label='Период'
-                            placeholder='Укажите период'
-                            className='max-w-80 w-full'
-                            size='md'
-                            value={dates}
-                            onChange={setDates}
-                            styles={{
-                                label: {
-                                    fontSize: '18px',
-                                    fontWeight: 600,
-                                    color: '#575859',
-                                    marginBottom: '4px',
-                                },
-                            }}
-                        />
+                        <PeriodDatePicker dates={dates} setDates={setDates} />
                     </Box>
                     <Box className='mt-4 w-full'>
                         <TextInput

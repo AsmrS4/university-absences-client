@@ -1,18 +1,16 @@
+import { fetchStatuses } from '@/api/api';
 import { ApplicationsTable } from '@/components/ApplicationTable';
+import { DatePicker } from '@/components/DatePicker';
 import { GroupCodeInput } from '@/components/GroupCodeInput';
 import { SelectInput } from '@/components/SelectInput';
 import { useAbsenceApplications } from '@/hooks/useAbsenceApplications';
+import { useStatuses } from '@/hooks/useStatuses';
 import { Box, Tabs, TextInput } from '@mantine/core';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function HomePage() {
-    const statuses = [
-        { label: 'По болезни', value: 'sick' },
-        { label: 'Прием у врача', value: 'medical' },
-        { label: 'Командировка', value: 'business_trip' },
-        { label: 'Учебная', value: 'study' },
-        { label: 'Другая', value: 'another' },
-    ];
+    const { statuses } = useStatuses();
+    const [dates, setDates] = useState<[string | null, string | null]>([null, null]);
     const {
         applications,
         params,
@@ -61,6 +59,7 @@ export default function HomePage() {
                                     value={params.group_code || 0}
                                     onChange={handleGroupCode}
                                 />
+                                <DatePicker dates={dates} setDates={setDates} />
                             </Box>
                             <Box className='mt-4 w-full'>
                                 <TextInput
@@ -111,7 +110,10 @@ export default function HomePage() {
                     </Tabs>
                 </Box>
                 <Box className='w-full rounded-xl bg-white'>
-                    <ApplicationsTable applications={applications.data} />
+                    <ApplicationsTable
+                        applications={applications.data}
+                        handleSelect={handleSelectOrder}
+                    />
                 </Box>
             </div>
         </>
