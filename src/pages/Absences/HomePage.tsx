@@ -2,8 +2,8 @@ import { ApplicationsTable } from '@/components/ApplicationTable';
 import { GroupCodeInput } from '@/components/GroupCodeInput';
 import { SelectInput } from '@/components/SelectInput';
 import { useAbsenceApplications } from '@/hooks/useAbsenceApplications';
-import type { AbsenceType } from '@/models/absence';
-import { Box, Tabs, TextInput, type ComboboxItem } from '@mantine/core';
+import { Box, Tabs, TextInput } from '@mantine/core';
+import { useEffect } from 'react';
 
 export default function HomePage() {
     const statuses = [
@@ -24,10 +24,14 @@ export default function HomePage() {
         handleSelectType,
     } = useAbsenceApplications();
 
+    useEffect(() => {
+        console.log(params);
+    }, [params]);
+
     return (
         <>
             <div className='w-full h-full flex flex-col gap-6'>
-                <h1 className='text-3xl font-semibold'>Заявки</h1>
+                <h1 className='text-2xl font-semibold'>Заявки</h1>
                 <Box className='w-full rounded-xl bg-white'>
                     <Tabs defaultValue='requests'>
                         <Tabs.List>
@@ -53,7 +57,10 @@ export default function HomePage() {
                                     value={params.type || ''}
                                     onChange={handleSelectType}
                                 />
-                                <GroupCodeInput value={0} onChange={undefined} />
+                                <GroupCodeInput
+                                    value={params.group_code || 0}
+                                    onChange={handleGroupCode}
+                                />
                             </Box>
                             <Box className='mt-4 w-full'>
                                 <TextInput
@@ -80,7 +87,10 @@ export default function HomePage() {
                                     value={params.type || ''}
                                     onChange={handleSelectType}
                                 />
-                                <GroupCodeInput value={0} onChange={undefined} />
+                                <GroupCodeInput
+                                    value={params.group_code || 0}
+                                    onChange={handleGroupCode}
+                                />
                             </Box>
                             <Box className='mt-4 w-full'>
                                 <TextInput

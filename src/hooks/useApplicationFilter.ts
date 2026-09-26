@@ -13,22 +13,21 @@ export const useApplicationFilters = () => {
     const [params, setParams] = useState<AbsenceApplicationsFilterParams>(defaultParams);
 
     const handleFullName = (value: string): void => {
-        const trimmedValue = value.trim();
-        if (trimmedValue) setParams((prev) => ({ ...prev, full_name: value }));
+        const trimmed = value.trim();
+        setParams((prev) => ({ ...prev, full_name: trimmed || null }));
     };
 
     const handleGroupCode = (value: number): void => {
-        if (value > 0) setParams((prev) => ({ ...prev, group_code: value }));
+        const num = typeof value === 'string' ? Number(value) : value;
+        setParams((prev) => ({ ...prev, group_code: num > 0 ? num : null }));
     };
 
     const handleSelectType = (value: string | null, option: ComboboxItem<string>): void => {
-        const trimmedValue = value != null ? value.trim() : '';
-        console.log('selected type: ', value);
-        if (trimmedValue) setParams((prev) => ({ ...prev, type: value }));
+        setParams((prev) => ({ ...prev, type: value?.trim() || null }));
     };
 
     const resetFilters = (): void => {
-        setParams(defaultParams);
+        setParams({ ...defaultParams });
     };
 
     return {

@@ -14,7 +14,7 @@ export default function HistoryPage() {
     return (
         <>
             <div className='w-full h-full flex flex-col gap-6'>
-                <h1 className='text-3xl font-semibold'>Архив пропусков</h1>
+                <h1 className='text-2xl font-semibold'>Архив пропусков</h1>
                 <Box className='w-full rounded-xl bg-white p-4 pt-0'>
                     <Box className='mt-4 flex flex-row items-center gap-4'>
                         <Select

@@ -1,25 +1,9 @@
 import type { AbsenceType } from '@/models/absence';
-import { Table, Badge, ScrollArea } from '@mantine/core';
+import { Table, ScrollArea } from '@mantine/core';
 
 interface Props {
     applications: AbsenceType[];
 }
-
-const statusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-        case 'одобрено':
-        case 'approved':
-            return 'green';
-        case 'отклонено':
-        case 'rejected':
-            return 'red';
-        case 'на рассмотрении':
-        case 'pending':
-            return 'yellow';
-        default:
-            return 'gray';
-    }
-};
 
 export const ApplicationsTable = ({ applications }: Props) => {
     const formatPeriod = (from: string, to: string) => {
