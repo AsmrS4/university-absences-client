@@ -23,7 +23,9 @@ export const formatDate = (isoString: string | undefined): string => {
 };
 
 export const formatDisplayPeriod = (from: string, to: string) => {
-    return from === to ? from : `${formatDisplayDate(from)} — ${formatDisplayDate(to)}`;
+    return from === to
+        ? formatDisplayDate(from)
+        : `${formatDisplayDate(from)} — ${formatDisplayDate(to)}`;
 };
 
 export const formatDisplayDate = (dateStr?: string): string => {
@@ -37,7 +39,7 @@ export const formatDisplayDate = (dateStr?: string): string => {
 
     let result = `${formattedDay} ${formattedMonth} ${year}`;
 
-    if (timePart) {
+    if (timePart && timePart != '00:00:00Z') {
         const [hours, minutes] = timePart.split(':');
         result += ` ${hours}:${minutes}`;
     }

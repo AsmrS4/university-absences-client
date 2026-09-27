@@ -1,50 +1,37 @@
-import type { AbsenceApplications } from '@/models/absence';
 import { useEffect, useState } from 'react';
-import { useApplicationFilters } from './useApplicationFilter';
 import { useErrorHandler } from './useErrorHandler';
-import { useNavigate } from 'react-router-dom';
-import { routes } from '@/router/routes';
-import { fetchAbsences } from '@/api/api';
+import { useHistoryFilters } from './useHistoryFilters';
+import type { AbsenceApplications } from '@/models/absence';
+import { fetchHistory } from '@/api/api';
 
-export const useAbsenceApplications = (tab: string) => {
+export const useHistoryApplications = () => {
     const [applications, setApplications] = useState<AbsenceApplications>({
         data: [],
         page: 1,
-        size: 0,
+        size: 10,
         total: 0,
     });
     const [loading, setLoading] = useState<boolean>(false);
-    const [hasAbsences, setHasAbsences] = useState<boolean>(false);
 
     const { errorMessage, handleError, clearError } = useErrorHandler();
     const {
         params,
         draft,
         handleFullName,
-        handleGroupCode,
         handleSelectType,
+        handleDateFrom,
+        handleDateTo,
         applyFilters,
         resetFilters,
-        clearDraft,
         handlePageChange,
-    } = useApplicationFilters();
-
-    const navigate = useNavigate();
-    const handleSelectOrder = (id: number): void => {
-        navigate(`/${routes.absences.home}/${id}`);
-    };
-
-    const handleApplications = (data: AbsenceApplications): void => {
-        setApplications((prev) => ({ ...prev, ...data }));
-    };
+    } = useHistoryFilters();
 
     const fetch = async (): Promise<void> => {
         clearError();
         setLoading(true);
-
         try {
-            const res: AbsenceApplications = await fetchAbsences(params);
-            handleApplications(res);
+            const res = await fetchHistory(params);
+            setApplications((prev) => ({ ...prev, ...res }));
         } catch (error) {
             handleError(error);
         } finally {
@@ -53,7 +40,6 @@ export const useAbsenceApplications = (tab: string) => {
     };
 
     useEffect(() => {
-        if (tab != 'requests') return;
         let isMounted = true;
         const init = async (): Promise<void> => {
             if (isMounted) {
@@ -61,30 +47,22 @@ export const useAbsenceApplications = (tab: string) => {
             }
         };
         init();
-
         return () => {
             isMounted = false;
         };
     }, [params]);
 
-    useEffect(() => {
-        setHasAbsences(applications.data.length != 0);
-    }, [applications.data.length]);
-
     return {
-        loading,
-        hasAbsences,
-        errorMessage,
-        params,
-        draft,
         applications,
-        handleSelectOrder,
+        loading,
+        errorMessage,
+        draft,
         handleFullName,
-        handleGroupCode,
         handleSelectType,
+        handleDateFrom,
+        handleDateTo,
         applyFilters,
         resetFilters,
-        clearDraft,
         handlePageChange,
     };
 };

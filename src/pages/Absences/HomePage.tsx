@@ -2,9 +2,10 @@ import { ApplicationsTable } from '@/components/Table/ApplicationTable';
 import { GroupCodeInput } from '@/components/GroupCodeInput';
 import { SelectInput } from '@/components/SelectInput';
 import { useAbsenceApplications } from '@/hooks/useAbsenceApplications';
-import { useStatuses } from '@/hooks/useStatuses';
 import { Box, Button, Pagination, Tabs, TextInput } from '@mantine/core';
 import { useSearchParams } from 'react-router-dom';
+import { useAbsenceTypes } from '@/hooks/useAbsenceTypes';
+import { useExtensionApplications } from '@/hooks/useExtensionApplications';
 
 const TABS = {
     REQUESTS: 'requests',
@@ -17,7 +18,7 @@ const isValidTab = (value: string | null): value is TabValue =>
     value === TABS.REQUESTS || value === TABS.EXTEND;
 
 export default function HomePage() {
-    const { statuses } = useStatuses();
+    const { types } = useAbsenceTypes();
     const [searchParams, setSearchParams] = useSearchParams();
 
     const tabParam = searchParams.get('tab');
@@ -26,6 +27,7 @@ export default function HomePage() {
     const {
         applications,
         draft,
+        params,
         loading,
         handleFullName,
         handleGroupCode,
@@ -35,7 +37,9 @@ export default function HomePage() {
         resetFilters,
         clearDraft,
         handlePageChange,
-    } = useAbsenceApplications();
+    } = useAbsenceApplications(currentTab);
+
+    const { extensions } = useExtensionApplications(currentTab, params);
 
     const handleTabChange = (value: string | null) => {
         if (!value) return;
@@ -60,10 +64,13 @@ export default function HomePage() {
     const totalPages =
         applications.size > 0 ? Math.ceil(applications.total / applications.size) : 1;
 
+    const extensionTotalPages =
+        extensions.size > 0 ? Math.ceil(extensions.total / extensions.size) : 1;
+
     return (
         <>
             <div className='w-full h-full flex flex-col gap-6'>
-                <h1 className='text-2xl font-semibold'>Заявки</h1>
+                <h1 className='text-3xl font-semibold'>Заявки</h1>
                 <Box className='w-full rounded-xl bg-white'>
                     <Tabs value={currentTab} onChange={handleTabChange}>
                         <Tabs.List>
@@ -89,7 +96,7 @@ export default function HomePage() {
                                 <SelectInput
                                     label={'Тип пропуска'}
                                     placeholder={'Укажите тип пропуска'}
-                                    data={statuses}
+                                    data={types}
                                     value={draft.type || ''}
                                     onChange={handleSelectType}
                                 />
@@ -143,7 +150,7 @@ export default function HomePage() {
                                 <SelectInput
                                     label={'Тип пропуска'}
                                     placeholder={'Укажите тип пропуска'}
-                                    data={statuses}
+                                    data={types}
                                     value={draft.type || ''}
                                     onChange={handleSelectType}
                                 />
@@ -196,14 +203,28 @@ export default function HomePage() {
                 <Box className='w-full rounded-xl'>
                     <ApplicationsTable
                         loading={loading}
-                        applications={applications.data}
+                        applications={
+                            currentTab == TABS.REQUESTS ? applications.data : extensions.data
+                        }
                         handleSelect={handleSelectOrder}
                     />
-                    {totalPages > 1 && (
+                    {totalPages > 1 && currentTab == TABS.REQUESTS && (
                         <Box className='flex justify-center py-4'>
                             <Pagination
                                 total={totalPages}
                                 value={applications.page}
+                                onChange={handlePageChange}
+                                size='md'
+                                radius='md'
+                                color='#0061e3'
+                            />
+                        </Box>
+                    )}
+                    {extensionTotalPages > 1 && currentTab == TABS.EXTEND && (
+                        <Box className='flex justify-center py-4'>
+                            <Pagination
+                                total={extensionTotalPages}
+                                value={extensions.page}
                                 onChange={handlePageChange}
                                 size='md'
                                 radius='md'

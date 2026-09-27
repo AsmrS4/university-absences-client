@@ -25,6 +25,23 @@ import {
     AttachmentsSkeleton,
     UserDetailsSkeleton,
 } from '@/components/Skeleton/AbsencePageSkeleton';
+import { useStatuses } from '@/hooks/useStatuses';
+import { getStatusLabel } from '@/utils/status';
+import { getTypeLabel } from '@/utils/type';
+import { useAbsenceTypes } from '@/hooks/useAbsenceTypes';
+
+const getStatusColor = (status: string): string => {
+    switch (status) {
+        case 'pending':
+            return 'gray';
+        case 'rejected':
+            return 'red';
+        case 'approved':
+            return 'blue';
+        default:
+            return 'gray';
+    }
+};
 
 export const AbsencePage = () => {
     const { id } = useParams();
@@ -33,7 +50,9 @@ export const AbsencePage = () => {
     const { absence, loading, handleApproveAbsence, handleRejectAbsence } = useAbsenceDetails(id);
     const { attachments, loading: attachmentsLoading } = useAbsenceAttachment(id);
     const { userDetails, state: userDetailsState } = useUserDetails(absence?.student_id);
-    const { handleSelectOrder } = useAbsenceApplications();
+    const { handleSelectOrder } = useAbsenceApplications('');
+    const { statuses } = useStatuses();
+    const { types } = useAbsenceTypes();
 
     if (loading) {
         return <AbsencePageSkeleton />;
@@ -55,7 +74,7 @@ export const AbsencePage = () => {
     return (
         <div className='max-w-180 w-full h-full flex flex-col gap-5'>
             <div className='flex flex-row items-center justify-between'>
-                <h1 className='text-2xl font-semibold'>Детали пропуска</h1>
+                <h1 className='text-3xl font-semibold'>Детали пропуска</h1>
                 {buttonsVisible && (
                     <Box className='flex flex-row items-center justify-between gap-3'>
                         <Button
@@ -95,14 +114,19 @@ export const AbsencePage = () => {
                     <DataList.Item>
                         <DataList.ItemLabel>Статус заявки</DataList.ItemLabel>
                         <DataList.ItemValue>
-                            <Badge variant='light' color='blue' size='lg' radius='md'>
-                                {absence.application_status}
+                            <Badge
+                                variant='light'
+                                color={getStatusColor(absence.application_status)}
+                                size='lg'
+                                radius='md'
+                            >
+                                {getStatusLabel(statuses, absence.application_status)}
                             </Badge>
                         </DataList.ItemValue>
                     </DataList.Item>
                     <DataList.Item>
                         <DataList.ItemLabel>ФИО</DataList.ItemLabel>
-                        <DataList.ItemValue>{absence.student_name}</DataList.ItemValue>
+                        <DataList.ItemValue>{absence.student_fullname}</DataList.ItemValue>
                     </DataList.Item>
 
                     {userDetailsState === 'loading' && <UserDetailsSkeleton />}
@@ -112,7 +136,7 @@ export const AbsencePage = () => {
                             <DataList.Item>
                                 <DataList.ItemLabel>Гражданство</DataList.ItemLabel>
                                 <DataList.ItemValue>
-                                    {userDetails?.nationality_type}
+                                    {userDetails?.nationality_type == 'domestic' ? 'РФ' : 'Иностр.'}
                                 </DataList.ItemValue>
                             </DataList.Item>
                             <DataList.Item>
@@ -129,7 +153,7 @@ export const AbsencePage = () => {
                     <DataList.Item>
                         <DataList.ItemLabel>Тип заявки</DataList.ItemLabel>
                         <DataList.ItemValue>
-                            {absence.application_type}
+                            {getTypeLabel(types, absence.application_type)}
                             {absence.related_to ? ' (Продление)' : ''}
                         </DataList.ItemValue>
                     </DataList.Item>
@@ -161,11 +185,12 @@ export const AbsencePage = () => {
                     </DataList.Item>
                 </DataList>
             </Box>
-            <Box className='w-full rounded-xl bg-white p-4 flex flex-col'>
-                <span className='text-lg font-semibold text-[#3d3d3d] mb-2'>Комментарий</span>
-                <p className='text-md font-light text-[#5d5d5e] italic'>{absence.comment}</p>
-            </Box>
-
+            {absence.comment && (
+                <Box className='w-full rounded-xl bg-white p-4 flex flex-col'>
+                    <span className='text-lg font-semibold text-[#3d3d3d] mb-2'>Комментарий</span>
+                    <p className='text-md font-light text-[#5d5d5e] italic'>{absence.comment}</p>
+                </Box>
+            )}
             {attachmentsLoading ? (
                 <AttachmentsSkeleton />
             ) : attachments.length > 0 ? (
@@ -191,16 +216,16 @@ const renderAttachments = (attachments: Attachment[]) => {
                         <FileIcon size={16} />
                         <Text size='sm'>{att.file_name + '_' + idx + 1}</Text>
                         <Text size='xs' c='dimmed'>
-                            ({att.file_type})
+                            Загружено: {formatDate(att.uploaded_at)}
                         </Text>
-                        {att.file_url && (
+                        {att.storage_url && (
                             <Badge
                                 variant='light'
                                 color='blue'
                                 className='inline-flex items-center gap-1 px-2 py-1'
                             >
                                 <Anchor
-                                    href={att.file_url}
+                                    href={att.storage_url}
                                     target='_blank'
                                     size='sm'
                                     className='flex items-center gap-1 text-xs'
@@ -210,9 +235,6 @@ const renderAttachments = (attachments: Attachment[]) => {
                                 </Anchor>
                             </Badge>
                         )}
-                        <Text size='xs' c='dimmed'>
-                            Загружено: {formatDate(att.uploaded_at)}
-                        </Text>
                     </Group>
                 </List.Item>
             ))}

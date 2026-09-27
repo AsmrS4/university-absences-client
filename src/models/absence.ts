@@ -1,7 +1,7 @@
 export interface AbsenceBase {
     id: number;
     student_id: number;
-    student_name: string;
+    student_fullname: string;
     application_type: string;
     application_status: string;
     date_from: string;
@@ -42,11 +42,11 @@ export interface AbsenceApplicationsFilterParams {
 }
 
 export interface AbsenceHistoryParams {
-    group_code: number;
-    type: string;
-    full_name: string;
-    date_from: string;
-    date_to: string;
+    group_code: number | null;
+    type: string | null;
+    full_name: string | null;
+    date_from: string | null;
+    date_to: string | null;
     page: number;
     size: number;
 }

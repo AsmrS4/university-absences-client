@@ -15,10 +15,11 @@ export interface UploadedFile {
 
 export interface Attachment {
     id: number;
+    application_id: number;
     file_id: string;
     file_name: string;
     mime_type: string;
     file_type: string;
-    file_url?: string;
+    storage_url?: string;
     uploaded_at: string;
 }

@@ -6,7 +6,7 @@ dayjs.extend(quarterOfYear);
 
 interface DatePickerProps {
     dates: [string | null, string | null];
-    setDates: React.Dispatch<React.SetStateAction<[string | null, string | null]>>;
+    setDates: (dates: [string | null, string | null]) => void;
 }
 
 export const PeriodDatePicker = ({ dates, setDates }: DatePickerProps) => {
