@@ -23,6 +23,7 @@ export const GroupCodeInput = (props: CodeInputProps) => {
             maxLength={6}
             size='md'
             value={props.value}
+            className='w-full sm:w-auto'
             onChange={handleChange}
             styles={{
                 label: {

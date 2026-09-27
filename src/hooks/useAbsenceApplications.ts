@@ -17,7 +17,17 @@ export const useAbsenceApplications = () => {
     const [hasAbsences, setHasAbsences] = useState<boolean>(false);
 
     const { errorMessage, handleError, clearError } = useErrorHandler();
-    const { params, handleFullName, handleGroupCode, handleSelectType } = useApplicationFilters();
+    const {
+        params,
+        draft,
+        handleFullName,
+        handleGroupCode,
+        handleSelectType,
+        applyFilters,
+        resetFilters,
+        clearDraft,
+        handlePageChange,
+    } = useApplicationFilters();
 
     const navigate = useNavigate();
     const handleSelectOrder = (id: number): void => {
@@ -65,10 +75,15 @@ export const useAbsenceApplications = () => {
         hasAbsences,
         errorMessage,
         params,
+        draft,
         applications,
         handleSelectOrder,
         handleFullName,
         handleGroupCode,
         handleSelectType,
+        applyFilters,
+        resetFilters,
+        clearDraft,
+        handlePageChange,
     };
 };

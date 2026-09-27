@@ -116,7 +116,7 @@ const MOCK_ABSENCES: AbsenceBase[] = [
 const MOCK_RES = {
     data: MOCK_ABSENCES,
     page: 1,
-    size: 10,
+    size: 20,
     total: MOCK_ABSENCES.length,
 };
 
@@ -130,11 +130,15 @@ const MOCK_ABSENCE = {
     date_to: '2024-03-15',
     create_time: '2024-03-09T14:30:00',
     comment: 'Добрый день, я пропустил занятия из-за простуды. Справку прилагаю',
-    related_to: '',
+    related_to: 0,
     rejection_reason: '',
 };
 
 export const fetchAbsences = async (params: AbsenceApplicationsFilterParams) => {
+    return MOCK_RES;
+};
+
+export const fetchAbsencesToExtend = async (params: AbsenceApplicationsFilterParams) => {
     return MOCK_RES;
 };
 

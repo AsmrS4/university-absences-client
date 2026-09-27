@@ -1,9 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { routes } from './routes';
+import PrivateRouter from '@/app/PrivateRouter';
 import { AppLayout } from '@/pages/AppLayout';
 import { AbsencePage } from '@/pages/Absences/AbsencePage';
-import PrivateRouter from '@/app/PrivateRouter';
-import LoginPage from '@/pages/Auth/LoginPage';
+import { LoginPage } from '@/pages/Auth/LoginPage';
 import { AuthLoginHandler } from '@/pages/Auth/AuthLoginHandler';
 import HomePage from '@/pages/Absences/HomePage';
 import HistoryPage from '@/pages/Absences/HistoryPage';
@@ -46,6 +46,6 @@ export const router = createBrowserRouter(
         },
     ],
     {
-        basename: '/plugins/absences_plugin/app',
+        basename: '/plugins/absence-plugin/app',
     },
 );

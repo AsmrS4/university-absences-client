@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { routes } from '@/router/routes';
 import { logoutUser } from '@/api/auth';
 import { errors } from '@/constants/messages';
+import { useProfile } from '@/hooks/useProfile';
 
 const navItems = [
     {
@@ -29,9 +30,10 @@ const navItems = [
 
 export const AppLayout = () => {
     const [opened, { toggle }] = useDisclosure();
-    const [active, setActive] = useState('certificates');
+    const [active, setActive] = useState('absences');
     const { errorMessage, handleError, clearError } = useErrorHandler();
     const { handleErrorNotification } = useNotification();
+    const { fullName } = useProfile();
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -123,7 +125,7 @@ export const AppLayout = () => {
                         className='w-full p-2 flex flex-row items-center gap-2 text-md text-[#575859]'
                     >
                         <UserCircleIcon size={20} />
-                        Иванов Иван Иванович
+                        {fullName}
                     </Box>
                     <Box hiddenFrom='sm' className='w-full'>
                         {logoutButton(true)}

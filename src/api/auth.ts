@@ -35,3 +35,7 @@ export const logoutUser = async (): Promise<AxiosResponse> => {
         throw error;
     }
 };
+
+export const fetchProfile = async (): Promise<string> => {
+    return 'Иванов Иван Иванович';
+};

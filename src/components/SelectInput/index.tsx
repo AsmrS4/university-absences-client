@@ -16,7 +16,7 @@ export const SelectInput = (props: SelectProps) => {
             data={props.data}
             value={props.value}
             onChange={props.onChange}
-            className='max-w-60 w-full'
+            className='max-w-60 w-full sm:w-auto'
             size='md'
             styles={{
                 label: {

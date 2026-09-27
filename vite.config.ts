@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => {
     const API_URL = env.VITE_DEV_URL;
 
     return {
-        base: '/plugins/absences_plugin/app/',
+        base: '/plugins/absence-plugin/app/',
         plugins: [react(), tailwindcss(), babel({ presets: [reactCompilerPreset()] })],
         server: {
             open: true,

@@ -11,7 +11,7 @@ export interface AbsenceBase {
 
 export interface AbsenceApplication extends AbsenceBase {
     comment: string;
-    related_to: string;
+    related_to: number;
     rejection_reason: string;
 }
 

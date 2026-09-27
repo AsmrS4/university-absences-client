@@ -7,7 +7,6 @@ import {
     EmptyState,
     Group,
     List,
-    Skeleton,
     Text,
     useModalsStack,
 } from '@mantine/core';
@@ -20,6 +19,12 @@ import { useAbsenceDetails } from '@/hooks/useAbsenceDetails';
 import { useUserDetails } from '@/hooks/useUserDetails';
 import type { Attachment } from '@/models/file';
 import { formatDate, formatDisplayDate, formatDisplayPeriod } from '@/utils/date';
+import { useAbsenceApplications } from '@/hooks/useAbsenceApplications';
+import {
+    AbsencePageSkeleton,
+    AttachmentsSkeleton,
+    UserDetailsSkeleton,
+} from '@/components/Skeleton/AbsencePageSkeleton';
 
 export const AbsencePage = () => {
     const { id } = useParams();
@@ -27,22 +32,25 @@ export const AbsencePage = () => {
 
     const { absence, loading, handleApproveAbsence, handleRejectAbsence } = useAbsenceDetails(id);
     const { attachments, loading: attachmentsLoading } = useAbsenceAttachment(id);
-    const { userDetails, state } = useUserDetails(absence?.student_id);
+    const { userDetails, state: userDetailsState } = useUserDetails(absence?.student_id);
+    const { handleSelectOrder } = useAbsenceApplications();
 
-    const buttonsVisible = absence?.application_status == 'pending';
+    if (loading) {
+        return <AbsencePageSkeleton />;
+    }
 
     if (id == undefined || absence == null) {
         return (
-            loading == false && (
-                <EmptyState
-                    icon={<CloudXIcon size={32} />}
-                    title='Ресурс не найден'
-                    description='Не удалось получить данные по запрашиваемому ресурсу. Данные удалены или перемещены в другое место.'
-                    color='red'
-                />
-            )
+            <EmptyState
+                icon={<CloudXIcon size={32} />}
+                title='Ресурс не найден'
+                description='Не удалось получить данные по запрашиваемому ресурсу. Данные удалены или перемещены в другое место.'
+                color='red'
+            />
         );
     }
+
+    const buttonsVisible = absence.application_status == 'pending';
 
     return (
         <div className='max-w-180 w-full h-full flex flex-col gap-5'>
@@ -74,86 +82,101 @@ export const AbsencePage = () => {
                 )}
             </div>
             <Box className='w-full rounded-xl bg-white p-6'>
-                <Skeleton visible={loading}>
-                    <DataList
-                        size='md'
-                        withDivider
-                        orientation='horizontal'
-                        styles={{
-                            itemLabel: {
-                                marginRight: 100,
-                            },
-                        }}
-                    >
+                <DataList
+                    size='md'
+                    withDivider
+                    orientation='horizontal'
+                    styles={{
+                        itemLabel: {
+                            marginRight: 100,
+                        },
+                    }}
+                >
+                    <DataList.Item>
+                        <DataList.ItemLabel>Статус заявки</DataList.ItemLabel>
+                        <DataList.ItemValue>
+                            <Badge variant='light' color='blue' size='lg' radius='md'>
+                                {absence.application_status}
+                            </Badge>
+                        </DataList.ItemValue>
+                    </DataList.Item>
+                    <DataList.Item>
+                        <DataList.ItemLabel>ФИО</DataList.ItemLabel>
+                        <DataList.ItemValue>{absence.student_name}</DataList.ItemValue>
+                    </DataList.Item>
+
+                    {userDetailsState === 'loading' && <UserDetailsSkeleton />}
+
+                    {userDetailsState === 'success' && (
+                        <>
+                            <DataList.Item>
+                                <DataList.ItemLabel>Гражданство</DataList.ItemLabel>
+                                <DataList.ItemValue>
+                                    {userDetails?.nationality_type}
+                                </DataList.ItemValue>
+                            </DataList.Item>
+                            <DataList.Item>
+                                <DataList.ItemLabel>Группа</DataList.ItemLabel>
+                                <DataList.ItemValue>{userDetails?.group_code}</DataList.ItemValue>
+                            </DataList.Item>
+                            <DataList.Item>
+                                <DataList.ItemLabel>Факультет</DataList.ItemLabel>
+                                <DataList.ItemValue>{userDetails?.faculty_name}</DataList.ItemValue>
+                            </DataList.Item>
+                        </>
+                    )}
+
+                    <DataList.Item>
+                        <DataList.ItemLabel>Тип заявки</DataList.ItemLabel>
+                        <DataList.ItemValue>
+                            {absence.application_type}
+                            {absence.related_to ? ' (Продление)' : ''}
+                        </DataList.ItemValue>
+                    </DataList.Item>
+
+                    {absence.related_to ? (
                         <DataList.Item>
-                            <DataList.ItemLabel>Статус заявки</DataList.ItemLabel>
-                            <DataList.ItemValue>
-                                <Badge variant='light' color='blue' size='lg' radius='md'>
-                                    {absence.application_status}
-                                </Badge>
+                            <DataList.ItemLabel>Ссылка на </DataList.ItemLabel>
+                            <DataList.ItemValue
+                                className='cursor-pointer text-blue-600 underline'
+                                onClick={() => {
+                                    handleSelectOrder(absence.related_to);
+                                }}
+                            >
+                                {'Продлеваемый пропуск'}
                             </DataList.ItemValue>
                         </DataList.Item>
-                        <DataList.Item>
-                            <DataList.ItemLabel>ФИО</DataList.ItemLabel>
-                            <DataList.ItemValue>{absence.student_name}</DataList.ItemValue>
-                        </DataList.Item>
-                        {state === 'success' && (
-                            <>
-                                <DataList.Item>
-                                    <DataList.ItemLabel>Гражданство</DataList.ItemLabel>
-                                    <DataList.ItemValue>
-                                        {userDetails?.nationality_type}
-                                    </DataList.ItemValue>
-                                </DataList.Item>
-                                <DataList.Item>
-                                    <DataList.ItemLabel>Группа</DataList.ItemLabel>
-                                    <DataList.ItemValue>
-                                        {userDetails?.group_code}
-                                    </DataList.ItemValue>
-                                </DataList.Item>
-                                <DataList.Item>
-                                    <DataList.ItemLabel>Факультет</DataList.ItemLabel>
-                                    <DataList.ItemValue>
-                                        {userDetails?.faculty_name}
-                                    </DataList.ItemValue>
-                                </DataList.Item>
-                            </>
-                        )}
-                        <DataList.Item>
-                            <DataList.ItemLabel>Тип заявки</DataList.ItemLabel>
-                            <DataList.ItemValue>{absence.application_type}</DataList.ItemValue>
-                        </DataList.Item>
-                        <DataList.Item>
-                            <DataList.ItemLabel>Даты отсутствия</DataList.ItemLabel>
-                            <DataList.ItemValue>
-                                <span>
-                                    {formatDisplayPeriod(absence.date_from, absence.date_to)}
-                                </span>
-                            </DataList.ItemValue>
-                        </DataList.Item>
-                        <DataList.Item>
-                            <DataList.ItemLabel>Дата обращения</DataList.ItemLabel>
-                            <DataList.ItemValue>
-                                {formatDisplayDate(absence.create_time)}
-                            </DataList.ItemValue>
-                        </DataList.Item>
-                    </DataList>
-                </Skeleton>
+                    ) : null}
+                    <DataList.Item>
+                        <DataList.ItemLabel>Даты отсутствия</DataList.ItemLabel>
+                        <DataList.ItemValue>
+                            <span>{formatDisplayPeriod(absence.date_from, absence.date_to)}</span>
+                        </DataList.ItemValue>
+                    </DataList.Item>
+                    <DataList.Item>
+                        <DataList.ItemLabel>Дата обращения</DataList.ItemLabel>
+                        <DataList.ItemValue>
+                            {formatDisplayDate(absence.create_time)}
+                        </DataList.ItemValue>
+                    </DataList.Item>
+                </DataList>
             </Box>
             <Box className='w-full rounded-xl bg-white p-4 flex flex-col'>
-                <Skeleton visible={loading}>
-                    <span className='text-lg font-semibold text-[#3d3d3d] mb-2'>Комментарий</span>
-                    <p className='text-md font-light text-[#5d5d5e] italic'>{absence.comment}</p>
-                </Skeleton>
+                <span className='text-lg font-semibold text-[#3d3d3d] mb-2'>Комментарий</span>
+                <p className='text-md font-light text-[#5d5d5e] italic'>{absence.comment}</p>
             </Box>
-            {!attachmentsLoading && attachments.length > 0 && (
+
+            {attachmentsLoading ? (
+                <AttachmentsSkeleton />
+            ) : attachments.length > 0 ? (
                 <Box className='w-full rounded-xl bg-white p-4 flex flex-col'>
                     <span className='text-lg font-semibold text-[#3d3d3d] mb-2'>
                         Приложенные документы
                     </span>
                     {renderAttachments(attachments)}
                 </Box>
-            )}
+            ) : null}
+
             <CommentModal stack={stack} callback={handleRejectAbsence} />
         </div>
     );

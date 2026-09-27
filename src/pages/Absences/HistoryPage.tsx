@@ -1,15 +1,10 @@
 import { PeriodDatePicker } from '@/components/DatePicker';
+import { useStatuses } from '@/hooks/useStatuses';
 import { Box, Select, TextInput } from '@mantine/core';
 import { useState } from 'react';
 
 export default function HistoryPage() {
-    const statuses = [
-        { label: 'По болезни', value: 'sick' },
-        { label: 'Прием у врача', value: 'medical' },
-        { label: 'Командировка', value: 'business_trip' },
-        { label: 'Учебная', value: 'study' },
-        { label: 'Другая', value: 'another' },
-    ];
+    const { statuses } = useStatuses();
     const [dates, setDates] = useState<[string | null, string | null]>([null, null]);
     return (
         <>
