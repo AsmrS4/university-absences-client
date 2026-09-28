@@ -7,6 +7,7 @@ import type {
     AbsenceType,
 } from '@/models/absence';
 import type { Attachment } from '@/models/file';
+import type { ReportFilters, ReportResponse } from '@/models/report';
 import type { UserDetails } from '@/models/user';
 import axios, { type AxiosResponse } from 'axios';
 
@@ -19,6 +20,18 @@ export const fetchAbsences = async (params: AbsenceApplicationsFilterParams) => 
             params: { ...params },
         });
         return res.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const generateReport = async (filters: ReportFilters) => {
+    try {
+        const res: AxiosResponse<ReportResponse> = await axios.get(`${BASE_URI}/absence/report`, {
+            withCredentials: true,
+            params: { ...filters },
+        });
+        return res.data.url;
     } catch (error) {
         throw error;
     }

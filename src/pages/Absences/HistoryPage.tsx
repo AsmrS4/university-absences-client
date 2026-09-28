@@ -5,10 +5,14 @@ import { Button, Box, Select, TextInput, Pagination } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '@/router/routes';
 import { useHistoryApplications } from '@/hooks/useAbsenceHistory';
+import { FileXlsIcon } from '@phosphor-icons/react';
+import { useDisclosure } from '@mantine/hooks';
+import { ReportModal } from '@/components/ReportModal';
 
 export default function HistoryPage() {
     const { types } = useAbsenceTypes();
     const navigate = useNavigate();
+    const [filtersOpened, { open: openFilters, close: closeFilters }] = useDisclosure(false);
 
     const {
         applications,
@@ -32,7 +36,18 @@ export default function HistoryPage() {
 
     return (
         <div className='w-full h-full flex flex-col gap-6'>
-            <h1 className='text-3xl font-semibold'>Архив пропусков</h1>
+            <Box className='w-full flex flex-row items-center justify-between'>
+                <h1 className='text-3xl font-semibold'>Архив пропусков</h1>
+                <Button
+                    className='w-full sm:w-1/3 px-4'
+                    color='#0061e3'
+                    size='md'
+                    onClick={openFilters}
+                    rightSection={<FileXlsIcon size={20} />}
+                >
+                    Отчет
+                </Button>
+            </Box>
             <Box className='w-full rounded-xl bg-white p-4'>
                 <Box className='flex flex-col sm:flex-row sm:items-end gap-4'>
                     <Select
@@ -117,6 +132,7 @@ export default function HistoryPage() {
                     </Box>
                 )}
             </Box>
+            <ReportModal isOpen={filtersOpened} onClose={closeFilters} />
         </div>
     );
 }

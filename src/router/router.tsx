@@ -7,6 +7,8 @@ import { LoginPage } from '@/pages/Auth/LoginPage';
 import { AuthLoginHandler } from '@/pages/Auth/AuthLoginHandler';
 import HomePage from '@/pages/Absences/HomePage';
 import HistoryPage from '@/pages/Absences/HistoryPage';
+import { NotFoundPage } from '@/pages/NotFound';
+import { PermissionDeniedPage } from '@/pages/Permisson';
 
 export const router = createBrowserRouter(
     [
@@ -44,6 +46,8 @@ export const router = createBrowserRouter(
                 },
             ],
         },
+        { element: <NotFoundPage />, path: routes.errors.not_found },
+        { element: <PermissionDeniedPage />, path: routes.errors.forbidden },
     ],
     {
         basename: '/plugins/absence-plugin/app',

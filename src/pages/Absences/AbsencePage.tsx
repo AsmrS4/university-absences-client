@@ -60,12 +60,14 @@ export const AbsencePage = () => {
 
     if (id == undefined || absence == null) {
         return (
-            <EmptyState
-                icon={<CloudXIcon size={32} />}
-                title='Ресурс не найден'
-                description='Не удалось получить данные по запрашиваемому ресурсу. Данные удалены или перемещены в другое место.'
-                color='red'
-            />
+            <div className='m-auto max-w-180 w-full h-full flex flex-col items-center justify-center'>
+                <EmptyState
+                    icon={<CloudXIcon size={32} />}
+                    title='Ресурс не найден'
+                    description='Не удалось получить данные по запрашиваемому ресурсу. Данные удалены или перемещены в другое место.'
+                    color='red'
+                />
+            </div>
         );
     }
 
