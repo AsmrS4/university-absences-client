@@ -9,3 +9,9 @@ export interface AuthResponse {
     authenticated: boolean;
     user_id: number;
 }
+
+export interface Profile {
+    id: number;
+    full_name: string;
+    is_dean: boolean;
+}

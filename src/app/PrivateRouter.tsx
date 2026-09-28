@@ -18,10 +18,10 @@ const PrivateRouter = () => {
         return <div>Загрузка...</div>;
     }
 
-    // if (!context.isAuthenticated) {
-    //     handleLogout();
-    //     return <Navigate to={routes.auth.login} replace />;
-    // }
+    if (!context.isAuthenticated) {
+        handleLogout();
+        return <Navigate to={routes.auth.login} replace />;
+    }
 
     return <Outlet />;
 };

@@ -1,5 +1,5 @@
 import { useErrorHandler } from '@/hooks/useErrorHandler';
-import { AppShell, Box, Burger, Button, Group, NavLink } from '@mantine/core';
+import { AppShell, Box, Burger, Button, Group, NavLink, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { CertificateIcon, SignOutIcon, ArchiveIcon, UserCircleIcon } from '@phosphor-icons/react';
@@ -125,7 +125,9 @@ export const AppLayout = () => {
                         className='w-full p-2 flex flex-row items-center gap-2 text-md text-[#575859]'
                     >
                         <UserCircleIcon size={20} />
-                        {fullName}
+                        <Text truncate className='flex-1 min-w-0'>
+                            {fullName}
+                        </Text>
                     </Box>
                     <Box hiddenFrom='sm' className='w-full'>
                         {logoutButton(true)}

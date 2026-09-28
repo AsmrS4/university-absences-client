@@ -191,6 +191,16 @@ export const AbsencePage = () => {
                     <p className='text-md font-light text-[#5d5d5e] italic'>{absence.comment}</p>
                 </Box>
             )}
+            {absence.rejection_reason && (
+                <Box className='w-full rounded-xl bg-white p-4 flex flex-col'>
+                    <span className='text-lg font-semibold text-[#3d3d3d] mb-2'>
+                        Причина отказа
+                    </span>
+                    <p className='text-md font-light text-[#5d5d5e] italic'>
+                        {absence.rejection_reason}
+                    </p>
+                </Box>
+            )}
             {attachmentsLoading ? (
                 <AttachmentsSkeleton />
             ) : attachments.length > 0 ? (

@@ -1,9 +1,10 @@
-import type { AuthResponse } from '@/models/auth';
+import type { AuthResponse, Profile } from '@/models/auth';
 import { routes } from '@/router/routes';
 import type { AxiosResponse } from 'axios';
 import axios from 'axios';
 
-export const BASENAME = '/plugins/absences_plugin/app/';
+export const BASENAME = '/plugins/absence-plugin/app/';
+const BASE_URI = '/api/triggers/http/absence-plugin/api';
 
 export const loginUser = (): void => {
     const returnTo = `${BASENAME}${routes.absences.home}`;
@@ -37,5 +38,12 @@ export const logoutUser = async (): Promise<AxiosResponse> => {
 };
 
 export const fetchProfile = async (): Promise<string> => {
-    return 'Иванов Иван Иванович';
+    try {
+        const res: AxiosResponse<Profile> = await axios.get(`${BASE_URI}/user/me`, {
+            withCredentials: true,
+        });
+        return res.data.full_name;
+    } catch (error) {
+        throw error;
+    }
 };

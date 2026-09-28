@@ -1,6 +1,5 @@
 import type { Attachment } from '@/models/file';
 import { useEffect, useState } from 'react';
-import { useErrorHandler } from './useErrorHandler';
 import { fetchAttachments } from '@/api/api';
 
 export const useAbsenceAttachment = (id: string | undefined) => {

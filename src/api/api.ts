@@ -10,12 +10,12 @@ import type { Attachment } from '@/models/file';
 import type { UserDetails } from '@/models/user';
 import axios, { type AxiosResponse } from 'axios';
 
-const BASE_URI = 'https://superbot.staziss-tech.ru/api/triggers/http/absence-plugin/api';
+const BASE_URI = '/api/triggers/http/absence-plugin/api';
 
 export const fetchAbsences = async (params: AbsenceApplicationsFilterParams) => {
     try {
         const res: AxiosResponse<AbsenceApplications> = await axios.get(`${BASE_URI}/absence/all`, {
-            withCredentials: false,
+            withCredentials: true,
             params: { ...params },
         });
         return res.data;
@@ -29,7 +29,7 @@ export const fetchHistory = async (params: AbsenceHistoryParams) => {
         const res: AxiosResponse<AbsenceApplications> = await axios.get(
             `${BASE_URI}/absence/history`,
             {
-                withCredentials: false,
+                withCredentials: true,
                 params: { ...params },
             },
         );
@@ -45,7 +45,7 @@ export const fetchAbsencesToExtend = async (params: AbsenceApplicationsFilterPar
         const res: AxiosResponse<AbsenceApplications> = await axios.get(
             `${BASE_URI}/absence/extend`,
             {
-                withCredentials: false,
+                withCredentials: true,
                 params: { ...params },
             },
         );
@@ -60,7 +60,7 @@ export const fetchDetails = async (id: number) => {
         const res: AxiosResponse<AbsenceApplication> = await axios.get(
             `${BASE_URI}/absence/details`,
             {
-                withCredentials: false,
+                withCredentials: true,
                 params: { absence_id: id },
             },
         );
@@ -76,7 +76,7 @@ export const approveAbsence = async (id: number | undefined): Promise<boolean> =
         const res: AxiosResponse<boolean> = await axios.post(
             `${BASE_URI}/absence/approve?absence_id=${id}`,
             {
-                withCredentials: false,
+                withCredentials: true,
             },
         );
         return res.data;
@@ -91,7 +91,7 @@ export const rejectAbsence = async (id: number | undefined, message: string): Pr
         const res: AxiosResponse<boolean> = await axios.delete(
             `${BASE_URI}/absence/reject?absence_id=${id}`,
             {
-                withCredentials: false,
+                withCredentials: true,
                 data: { reason: message },
             },
         );
@@ -106,7 +106,7 @@ export const fetchAttachments = async (id: number): Promise<Attachment[]> => {
         const res: AxiosResponse<Attachment[]> = await axios.get(
             `${BASE_URI}/absence/attachments`,
             {
-                withCredentials: false,
+                withCredentials: true,
                 params: { absence_id: id },
             },
         );
@@ -119,7 +119,7 @@ export const fetchAttachments = async (id: number): Promise<Attachment[]> => {
 export const fetchStudentDetails = async (id: number | undefined): Promise<UserDetails> => {
     try {
         const res: AxiosResponse<UserDetails> = await axios.get(`${BASE_URI}/absence/student`, {
-            withCredentials: false,
+            withCredentials: true,
             params: { student_id: id },
         });
         return res.data;
@@ -133,7 +133,7 @@ export const fetchStatuses = async (): Promise<AbsenceStatus[]> => {
         const res: AxiosResponse<AbsenceStatus[]> = await axios.get(
             `${BASE_URI}/absence/statuses`,
             {
-                withCredentials: false,
+                withCredentials: true,
             },
         );
         return res.data;
@@ -150,7 +150,7 @@ export const fetchStatuses = async (): Promise<AbsenceStatus[]> => {
 export const fetchTypes = async (): Promise<AbsenceType[]> => {
     try {
         const res: AxiosResponse<AbsenceStatus[]> = await axios.get(`${BASE_URI}/absence/types`, {
-            withCredentials: false,
+            withCredentials: true,
         });
         return res.data;
     } catch (error) {
